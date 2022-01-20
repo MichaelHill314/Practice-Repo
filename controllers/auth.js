@@ -1,6 +1,7 @@
 const User  = require('../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const storage = ('node-sessionstorage')
 
 exports.register = (req, res) => {
     bcrypt.genSalt(10, function(err, salt) {
@@ -32,6 +33,7 @@ exports.register = (req, res) => {
 
 exports.login = (req, res) => {
     let search = { email: req.body.email }
+    const session = req.session
 
     User.findOne(search).then((user) => {
         if (!user) {
@@ -55,7 +57,7 @@ exports.login = (req, res) => {
                     email:user.email,
                     token: token,
                     portalUserName: user.portalUserName,
-                    patientId: user.patientId
+                    patientId: user.patientId,
                 })
             }
         })

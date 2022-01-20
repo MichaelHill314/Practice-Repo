@@ -6,6 +6,7 @@ const connectDB = require('./db')
 const dotenv = require('dotenv')
 const cors = require('cors')
 const compression = require('compression')
+const session = require('express-session')
 
 const userRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
@@ -27,6 +28,13 @@ app.use(compression())
 app.use(express.json({ extended: false }))
 
 app.use(cors({ origin: '*' }))
+
+app.use(session({
+    secret:'supersneakysecret',
+    saveUninitialized: true,
+    cookie: { maxAge:10000 },
+    resave: false
+}))   
 
 if(process.env.NODE_ENV !== 'production'){
     dotenv.config()
